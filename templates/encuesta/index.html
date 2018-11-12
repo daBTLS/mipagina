@@ -1,0 +1,11 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'encuesta/style.css' %}"/>
+{% if lista_ultimas_preguntas %}
+    <ul>
+        {% for pregunta in lista_ultimas_preguntas %}
+            <li><a href="{% url 'detalle' pregunta.id %}">{{ pregunta.texto_pregunta }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay encuestas disponibles.</p>
+{% endif %}
