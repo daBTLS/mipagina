@@ -16,10 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 urlpatterns = [
     path('', include('inicio.urls')),
     # path('encuesta/', include('encuesta.urls')),
     path('mapas/', include('mapas.urls')),
+    path('reportes/', include('reportes.urls')),
     path('admin/', admin.site.urls),
 ]
+
+
+def handler404(request):
+    response = render_to_response('index.html', {}, context_instance=RequestContext(request))
+    response.status_code = 404
+    return response

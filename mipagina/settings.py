@@ -24,7 +24,7 @@ SECRET_KEY = '2vgccg_+97!zg0$y#wbvcw-x11t7k(#0x-0luq6tn%pygii0y7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     # 'encuesta.apps.EncuestaConfig',
     'mapas.apps.MapasConfig',
+    'reportes.apps.ReportesConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,8 +78,8 @@ WSGI_APPLICATION = 'mipagina.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'celex',
-        'USER': 'postgres',
+        'NAME': 'mipagina',
+        'USER': 'pp',
         'PASSWORD': 'neoeastwood',
         'HOST': '127.0.0.1',
         'PORT': '5432',

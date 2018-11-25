@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='mapa'),
-    path('prueba', views.prueba, name='prueba'),
-    # re_path('^(?P<pregunta_id>[0-9]+)/$', views.detalle, name='detalle'),
+    path('prueba', views.prueba, name='pruebaM'),
+    path('detalle/<str:sec>', views.detalle, name='detalle'),
 ]
