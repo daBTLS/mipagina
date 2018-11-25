@@ -1,0 +1,229 @@
+{% extends 'master.html' %}
+{% load staticfiles %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <style>
+        #map {
+            height: 500px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-around">
+            <div id="map" class="col-10 col-xs-12"></div>
+            <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="infoModalLabel">TITULO</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div id="info"></div>
+                        </div>
+                        {#                        <div class="modal-footer">#}
+                        {#                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>#}
+                        {#                            <button type="button" class="btn btn-primary">Save changes</button>#}
+                        {#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h4 class="text-center">INDICE DE INSEGURIDAD</h4>
+    <div class="row justify-content-center">
+        <div class="col-1 text-left"> SEGURO</div>
+        <div class="col-3 bg-success text-white"></div>
+        <div class="col-3 bg-warning text-dark"></div>
+        <div class="col-3 bg-danger text-white"></div>
+        <div class="col-1 text-right"> INSEGURO</div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var map;
+        var infoWindow;
+        var curr, asesinato, secuestro, violacion, robo_privado, robo_negocio, fraude, robo_transporte;
+
+        function initMap() {
+            var estiloMapa = new google.maps.StyledMapType([
+                {
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#212121"}]
+                }, {"elementType": "labels.icon", "stylers": [{"visibility": "on"}]}, {
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#757575"}]
+                }, {
+                    "elementType": "labels.text.stroke",
+                    "stylers": [{"color": "#212121"}]
+                }, {
+                    "featureType": "administrative",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#757575"}, {"visibility": "off"}]
+                }, {
+                    "featureType": "administrative.country",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#9e9e9e"}]
+                }, {
+                    "featureType": "administrative.land_parcel",
+                    "stylers": [{"visibility": "off"}]
+                }, {
+                    "featureType": "administrative.locality",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#bdbdbd"}]
+                }, {
+                    "featureType": "administrative.neighborhood",
+                    "stylers": [{"visibility": "off"}]
+                }, {"featureType": "poi", "stylers": [{"visibility": "off"}]}, {
+                    "featureType": "poi",
+                    "elementType": "labels.text",
+                    "stylers": [{"visibility": "off"}]
+                }, {
+                    "featureType": "poi",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#757575"}]
+                }, {
+                    "featureType": "poi.park",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#181818"}]
+                }, {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#616161"}]
+                }, {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [{"color": "#1b1b1b"}]
+                }, {
+                    "featureType": "road",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"color": "#2c2c2c"}]
+                }, {
+                    "featureType": "road",
+                    "elementType": "labels",
+                    "stylers": [{"visibility": "off"}]
+                }, {
+                    "featureType": "road",
+                    "elementType": "labels.icon",
+                    "stylers": [{"visibility": "off"}]
+                }, {
+                    "featureType": "road",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#8a8a8a"}]
+                }, {
+                    "featureType": "road.arterial",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#373737"}]
+                }, {
+                    "featureType": "road.highway",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#3c3c3c"}]
+                }, {
+                    "featureType": "road.highway.controlled_access",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#4e4e4e"}]
+                }, {
+                    "featureType": "road.local",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#616161"}]
+                }, {"featureType": "transit", "stylers": [{"visibility": "off"}]}, {
+                    "featureType": "transit",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#757575"}]
+                }, {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [{"color": "#000000"}]
+                }, {
+                    "featureType": "water",
+                    "elementType": "labels.text",
+                    "stylers": [{"visibility": "off"}]
+                }, {"featureType": "water", "elementType": "labels.text.fill", "stylers": [{"color": "#3d3d3d"}]}]);
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: {{ cen }},
+                mapTypeId: 'roadmap',
+                mapTypeControl: false,
+                streetViewControl: false,
+            });
+
+            map.mapTypes.set('styled_map', estiloMapa);
+            map.setMapTypeId('styled_map');
+
+            {% for x in lista %}
+
+                var c_{{ x.id }} = [{{ x.coordenadas }}];
+
+                var p_{{ x.id }} = new google.maps.Polygon({
+                    paths: c_{{ x.id }},
+                    strokeColor: '#{{ x.color }}',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#{{ x.color }}',
+                    fillOpacity: 0.35
+                });
+
+                p_{{ x.id }}.setMap(map);
+                p_{{ x.id }}.addListener('click', function (e) {
+                        muestraInfo.call(this, e, '{{ x.nombre }}', '{{ x.id }}', '{{ x.asesinato }}', '{{ x.secuestro }}', '{{ x.violacion }}', '{{ x.robo_privado }}', '{{ x.robo_negocio }}', '{{ x.fraude }}', '{{ x.robo_transporte }}');
+                    }
+                );
+
+            {% endfor %}
+
+            infoWindow = new google.maps.InfoWindow();
+        }
+
+        function muestraInfo(event, nom, id, c1, c2, c3, c4, c5, c6, c7) {
+            infoWindow.close();
+            curr = nom;
+            asesinato = c1;
+            secuestro = c2;
+            violacion = c3;
+            robo_privado = c4;
+            robo_negocio = c5;
+            fraude = c6;
+            robo_transporte = c7;
+            var contentString = '<a style="font-size: 20px;">' + nom + '</a>&nbsp&nbsp<button type="button" class="btn btn-link" data-toggle="modal" data-target="#infoModal"><span style="font-size: 20px;" class="fas fa-info-circle"></span></button>';
+            infoWindow.setContent(contentString);
+            infoWindow.setPosition(event.latLng);
+            infoWindow.open(map);
+        }
+
+        $('#infoModal').on('shown.bs.modal', function () {
+            document.getElementById("infoModalLabel").innerHTML = curr;
+            var content = "<ul class=\"list-group\">\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "ASESINATO" +
+                "<span class=\"badge badge-primary badge-pill\">" + asesinato + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "SECUESTRO" +
+                "<span class=\"badge badge-primary badge-pill\">" + secuestro + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "VIOLACION" +
+                "<span class=\"badge badge-primary badge-pill\">" + violacion + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "ROBO A PRIVADO" +
+                "<span class=\"badge badge-primary badge-pill\">" + robo_privado + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "ROBO A NEGOCIO" +
+                "<span class=\"badge badge-primary badge-pill\">" + robo_negocio + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "FRAUDE" +
+                "<span class=\"badge badge-primary badge-pill\">" + fraude + "</span>\n" +
+                "</li>\n" +
+                "<li class=\"list-group-item d-flex justify-content-between align-items-center\">\n" + "ROBO TRANSPORTE" +
+                "<span class=\"badge badge-primary badge-pill\">" + robo_transporte + "</span>\n" +
+                "</li>\n" +
+                "</ul>";
+            document.getElementById("info").innerHTML = content;
+        })
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOasrsHgzaVmIbGhWyPherFl7DNgOcSHM&callback=initMap">
+    </script>
+{% endblock %}

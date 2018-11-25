@@ -1,0 +1,18 @@
+{% extends 'master.html' %}
+{% load staticfiles %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div id="reporte" class="col-10">
+                <h1>REPORTE</h1>
+                <a class="nav-link" href="{% url 'pdf' %}">Descargar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

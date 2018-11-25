@@ -1,0 +1,16 @@
+{% extends 'master.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            {% for x in lista %}
+                {{ x.coordenadas }}
+                <br>
+                {{ x.nombre }}
+                <br>
+            {% endfor %}
+            {{ cen }}
+        </div>
+    </div>
+{% endblock %}
