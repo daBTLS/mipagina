@@ -1,0 +1,88 @@
+{% extends 'master.html' %}
+{% block head %}
+    <style>
+        .container {
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card col-12 col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">¿De dónde se obtiene la información?</h5>
+                    <p class="card-text">
+                        La información es obtenida de mensajes realizados a través de la Red Social
+                        Twitter. (Tweets)
+                    </p>
+                    <h5 class="card-title">¿De qué manera se obtiene la información de Twitter?</h5>
+                    <p class="card-text">
+                        Se tiene un proceso que se conecta a la API (Interfaz de Programación de Aplicaciones) expuesta
+                        por Twitter, en la cual se tiene un canal para extraer el flujo de Mensajes, para posteriormente
+                        realizar el filtrado para solo obtener los mensajes realizados por cuentas específicas y
+                        oficiales catalogadas en 4 grupos:
+                    <ul class="card-text">
+                        <li>Cuentas verificadas de las dependencias Gubernamentales relacionadas con la Seguridad de la
+                            Ciudad de México (CDMX).
+                        </li>
+                        <li>
+                            Cuentas de las 16 Delegaciones que componen a la CDMX.
+                        </li>
+                        <li>Cuentas de los medios de información como son noticieros y periódicos.</li>
+                        <li>Cuentas de Agrupaciones Sociales (Asociaciones Civiles, Grupos de Derechos Humanos)
+                            dedicadas
+                            en el tema de la Seguridad.
+                        </li>
+                    </ul>
+                    </p>
+                    <h5 class="card-title">¿Por qué estás cuentas, como fuentes de información?</h5>
+                    <p class="card-text">
+                        Se tomaron estas cuentas, con base en el nivel de certidumbre que ofrecen, pues al incluir
+                        cuentas no oficiales ni enfocadas al tema de inseguridad, se podrían incluir escenarios donde la
+                        información fuera falsa y tuviera propósitos personales distintos al de informar los eventos
+                        delictivos que ocurren en las zonas de la CDMX.
+                    </p>
+                    <p class="card-text">
+                        Complementar la información que nos presentan las entidades de Gobierno, unificar las diferentes
+                        fuentes de información y presentarlas de una manera centralizada y resumida.
+                    </p>
+                    <p class="card-text">
+                        Otro punto del por qué se limita a los mensajes de los grupos de cuentas antes mencionados, es
+                        la diversidad del lenguaje que se utiliza para expresarse en las Redes Sociales, teniendo como
+                        ejemplo el uso de frases que pueden tener diferentes significados como: "Ella me robo el
+                        corazón", "Es la persona que me mata de amor", etc., en donde no están indicando un evento
+                        delictivo y que pueden generar confusión por las palabras empleadas.
+                    </p>
+                    <h5 class="card-title">¿Cómo se procesa la información obtenida?</h5>
+                    <p class="card-text">
+                        Una vez obtenida la información, se le realizan procesos de limpieza, normalización y aplición
+                        de filtros para obtener los mensajes que hacen referencia a algún tipo de evento
+                        delictivo:</p>
+                    <ul class="card-text">
+                        <li>Contra la vida [Asesinato]</li>
+                        <li>Contra la Privación de Libertad [Secuestro]</li>
+                        <li>Contra la Integridad sexual [Violación]</li>
+                        <li>Contra los bienes privados y propiedad privada [Robo a Privado, Robo a Negocio, Robo a
+                            Transporte]
+                        </li>
+                        <li>Engaño [Fraude]</li>
+                    </ul>
+                    <p>
+                        Además se tiene una etapa de Índice de Ponderación de Delito (Utilizada para los indicadores de
+                        Inseguridad) y se realiza la identificación de la Zona donde suscito el evento delictivo
+                        (Delegación
+                        y/o Colonia), previo filtro para tratar solo los que ocurren dentro de la CDMX.
+                    </p>
+                    <h5 class="card-title">¿Qué resultados se buscan con el análisis de la información?</h5>
+                    <p class="card-text">
+                        Mostrar por medio de mapas, la identificación de las zonas de inseguridad presentes en la CDMX,
+                        con base en un semáforo de Índice de Inseguridad, además de incluir un apartado donde se pueden
+                        visualizar gráficas y reportes de la información resultante.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.db import connection
 from .models import Color
 
 import random
+import datetime
 
 
 def index(request):
@@ -15,6 +16,7 @@ def index(request):
 
 def prueba(request):
     labels = []
+    fecha = ''
     data = ''
     bColor = []
     hColor = []
@@ -50,9 +52,12 @@ def prueba(request):
                           'bColor': listaColores[i].c1,
                           'hColor': listaColores[i].c2})
             i = i + 1
-
-            context = {'labels': labels, 'data': data, 'bColor': bColor, 'hColor': hColor, 'lista': lista,
-                       'meses': meses}
+    with connection.cursor() as cursor:
+        cursor.execute("select max(fecha) from mensajes")
+        row = cursor.fetchone()
+        fecha = ''.join(row[0].strftime('%d / %m / %Y'))
+    context = {'labels': labels, 'data': data, 'bColor': bColor, 'hColor': hColor, 'lista': lista, 'meses': meses,
+               'fecha': fecha}
     return render(request, 'reportes/prueba.html', context)
 
 
