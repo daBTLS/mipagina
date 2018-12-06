@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db import connection
 
 
 def index(request):
@@ -6,4 +7,12 @@ def index(request):
 
 
 def info(request):
-    return render(request, 'info.html')
+    cuentas = []
+    with connection.cursor() as cursor:
+        cursor.execute("select cuenta from ctlgo_cuentas")
+        rows = cursor.fetchall()
+        for row in rows:
+            cuentas.append({'link': 'https://twitter.com/' + row[0].replace('@', ''), 'nombre': row[0]})
+
+    context = {'cuentas': cuentas}
+    return render(request, 'info.html', context)

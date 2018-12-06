@@ -1,18 +1,117 @@
 {% extends 'master.html' %}
-{% load staticfiles %}
 {% block head %}
+    <style>
+        .btn {
+            position: fixed;
+            bottom: 30px;
+            right: 0px;
+
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+    <br>
     <div class="container">
-        <div class="row justify-content-center">
-            <div id="reporte" class="col-12 col-md-10">
-                <h1>REPORTE</h1>
-                <a class="nav-link" href="{% url 'pdf' %}">Descargar</a>
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group ">
+                    <label class="d-inline-block" for="sel1">INFORMACION DE:</label>
+                    <select class="form-control form-control-sm d-inline-block" style="width: auto;" id="sel1">
+                        <option value="0">CDMX</option>
+                        {% for d in delegaciones %}
+                            <option value="{{ d.id }}">{{ d.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <h6 class="text-right">ULTIMA ACTUALIZACIÓN: {{ fecha }}</h6>
             </div>
         </div>
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+                <h4 class="text-center">TOTAL DE INCIDENCIAS DE DELITOS REGISTRADOS</h4>
+                <canvas id="pieG"></canvas>
+            </div>
+        </div>
+        <br><br><br><br>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10">
+                <h4 class="text-center">INCIDENCIAS DE DELITOS EN EL TIEMPO (AÑO 2018) </h4>
+                <canvas id="lineG"></canvas>
+            </div>
+        </div>
+        <a class="btn btn-primary" href="{% url 'pdf' %}" role="button">Descargar PDF</a>
     </div>
 {% endblock %}
 
 {% block scripts %}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.7/js/mdb.min.js"></script>
+
+    <script>
+        //pie
+        var ctxP = document.getElementById("pieG").getContext('2d');
+        var ctxL = document.getElementById("lineG").getContext('2d');
+        var myPieChart = new Chart(ctxP, {
+            type: 'pie',
+            data: {
+                labels: [{% for lb in labels %} "{{ lb }}",{% endfor %}],
+                datasets: [{
+                    data: [{{ data }}],
+                    backgroundColor: [{% for bc in bColor %} "{{ bc }}",{% endfor %}],
+                    hoverBackgroundColor: [{% for hc in hColor %} "{{ hc }}",{% endfor %}]
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left',
+                    labels: {
+                        boxWidth: 10,
+                        fontSize: 10
+                    }
+                }
+            }
+        });
+        var myLineChart = new Chart(ctxL, {
+            type: 'line',
+            data: {
+                labels: [{% for m in meses %} "{{ m }}",{% endfor %}],
+                datasets: [
+                    {% for l in lista %}
+                        {
+                            label: "{{ l.delito }}",
+                            data: [{{ l.data }}],
+                            backgroundColor: ["{{ l.hColor }}"],
+                            borderColor: ["{{ l.bColor }}"],
+                            borderWidth: 2
+                        },
+                    {% endfor %}
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left',
+                    labels: {
+                        boxWidth: 10,
+                        fontSize: 10
+                    }
+                },
+            }
+        });
+
+        $('#sel1').on('change', function () {
+            var x = "{% url 'reporte' sec='REPLACE_ME' %}";
+            var url = x.replace('REPLACE_ME', $(this).val())
+            window.location.replace(url);
+        });
+
+        $(document).ready(function () {
+            $('#sel1').val({{ sec }});
+        });
+    </script>
 {% endblock %}

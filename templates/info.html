@@ -55,6 +55,13 @@
                         corazón", "Es la persona que me mata de amor", etc., en donde no están indicando un evento
                         delictivo y que pueden generar confusión por las palabras empleadas.
                     </p>
+                    <p class="card-text">Los datos que se muestran fueron obtenidos de las siguientes cuentas de
+                        twitter: </p>
+                    <p class="card-text">
+                        {% for c in cuentas %}
+                            <a href="{{ c.link }}" target="_blank">{{ c.nombre }}</a>  /
+                        {% endfor %}
+                    </p>
                     <h5 class="card-title">¿Cómo se procesa la información obtenida?</h5>
                     <p class="card-text">
                         Una vez obtenida la información, se le realizan procesos de limpieza, normalización y aplición
