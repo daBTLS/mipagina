@@ -86,7 +86,7 @@ def pdf(request):
     cuentas = []
     headers = ["DELITO", "DELEGACION", "LOCALIDAD", "NUMERO INCIDENCIAS"]
 
-    script = "select dl.delito, coalesce(delegacion, '-'), coalesce(localidad, '-'), count(*) from mensajes, ctlgo_delito dl cross join lateral unnest(array[delito1, delito2, delito3]) with ordinality as d (delito, i) where dl.id_grupo = d.delito group by dl.delito, delegacion, localidad order by dl.delito, delegacion, localidad"
+    script = "select dl.delito, coalesce(delegacion, '-'), coalesce(localidad, '-'), count(*) as num from mensajes, ctlgo_delito dl cross join lateral unnest(array[delito1, delito2, delito3]) with ordinality as d (delito, i) where dl.id_grupo = d.delito group by dl.delito, delegacion, localidad order by num desc, dl.delito, delegacion, localidad"
     with connection.cursor() as cursor:
         cursor.execute(script)
         rows = cursor.fetchall()

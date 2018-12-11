@@ -31,15 +31,13 @@
                 </div>
             </div>
         </div>
-    </div>
-    <h4 class="text-center">INDICE DE INSEGURIDAD</h4>
-    <div class="row justify-content-center">
-        <div class="col-1 text-left"> SEGURO</div>
-        <div class="col-3 bg-success text-white"></div>
-        <div class="col-3 bg-warning text-dark"></div>
-        <div class="col-3 bg-danger text-white"></div>
-        <div class="col-1 text-right"> INSEGURO</div>
-    </div>
+        <h4 class="text-center">INDICE DE INSEGURIDAD</h4>
+        <div class="row justify-content-center">
+            <div class="col bg-light text-dark">SIN DATOS</div>
+            <div class="col bg-success text-white">SEGURO</div>
+            <div class="col bg-warning text-dark">PRECAUCIÓN</div>
+            <div class="col bg-danger text-white">INSEGURO</div>
+        </div>
     </div>
 {% endblock %}
 
@@ -224,6 +222,6 @@
         })
     </script>
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOasrsHgzaVmIbGhWyPherFl7DNgOcSHM&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key=TU_LLAVE_DEL_API&callback=initMap">
     </script>
 {% endblock %}
