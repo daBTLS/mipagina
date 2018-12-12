@@ -121,10 +121,10 @@ def getRandomColors(num):
 
 
 def prueba(request):
-    fecha = ''
     lista = []
     cuentas = []
     headers = ["DELITO", "DELEGACION", "LOCALIDAD", "NUMERO INCIDENCIAS"]
+    fecha = ''
 
     script = "select dl.delito, coalesce(delegacion, '-'), coalesce(localidad, '-'), count(*) from mensajes, ctlgo_delito dl cross join lateral unnest(array[delito1, delito2, delito3]) with ordinality as d (delito, i) where dl.id_grupo = d.delito group by dl.delito, delegacion, localidad order by dl.delito, delegacion, localidad"
     with connection.cursor() as cursor:
@@ -149,4 +149,3 @@ def prueba(request):
     resp = HttpResponse(content_type='application/pdf')
     result = generate_pdf('reportes/prueba.html', file_object=resp, context=context)
     return result
-    # return render(request, 'reportes/prueba.html', context)
